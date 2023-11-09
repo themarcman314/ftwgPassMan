@@ -5,20 +5,20 @@
 #include <assert.h>
 
 char *GeneratePass(char type, size_t size);
-void show_arguments(void);
+void ShowArguments(void);
 
 int main(int argc, char **argv)
 {
 	if(argc == 1)
 	{
 		fprintf(stderr, "No arguments specified");
-		show_arguments();
+		ShowArguments();
 		return 1;
 	}
 	if(argc == 2)
 	{
 		fprintf(stderr, "Missing one argument");
-		show_arguments();
+		ShowArguments();
 		return 1;
 	}
 	char *pass = GeneratePass(*argv[1], atoi(argv[2]));
@@ -74,7 +74,7 @@ char *GeneratePass(char char_type, size_t size)
 			break;
 		default:
 			fprintf(stderr,"\e[0;31mWrong argument\e[0m");
-			show_arguments();	
+			ShowArguments();	
 			return NULL;
 	}
 		
@@ -88,7 +88,7 @@ char *GeneratePass(char char_type, size_t size)
 	return pass;
 }
 
-void show_arguments(void)
+void ShowArguments(void)
 {
 			fprintf(stderr, ", please specify \e[1mone\e[0m of the following:"
 					"\n\033[34mu\e[0m for uppercase\n"
@@ -96,4 +96,15 @@ void show_arguments(void)
 					"\n\033[34ms\e[0m for special characters\n"
 					"Also requires the number of desired characters "
 					"for the password as a second argument.\n");
+}
+
+int Savetofile(char *pass)
+{
+	assert(0 && "Not Implemented");
+	return 0;
+}
+int CPtoClipboard(char *pass)
+{
+	assert(0 && "Not Implemented");
+	return 0;
 }

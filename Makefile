@@ -1,2 +1,2 @@
-all: main.c
-	gcc -o ftwgpm main.c
+all: src/main.c
+	gcc -o ftwgpm src/main.c
