@@ -5,7 +5,7 @@ Have fun :)
 
 Constructive and destructive criticism is ofc welcome!
 
-This program is intended for linux although could be fun to expand it after adding more features
+This program is intended for linux although could be fun to expand it to other platforms after adding more features
 
 The program is very simple just specify two arguments so even your grandma can run it
 
