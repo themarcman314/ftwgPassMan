@@ -1,7 +1,9 @@
 # Faster Than Whai's Grandma or FTWG Password Manager
 Hi Pietro, this is an 1000x improvement over last version
+
 Have fun :)
-Constructive and destructive criticism is welcome
+
+Constructive and destructive criticism is ofc welcome!
 
 This program is intended for linux although could be fun to expand it after adding more features
 
