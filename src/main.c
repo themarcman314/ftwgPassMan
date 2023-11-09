@@ -42,6 +42,7 @@ int main(int argc, char** argv)
 {
 	switch (argc) 
 	{
+
 		case 1:
 			fprintf(stderr, "No arguments specified");
 			ShowArguments();
@@ -50,14 +51,17 @@ int main(int argc, char** argv)
 			fprintf(stderr, "Missing one argument");
 			ShowArguments();
 			return 1;
-	}
-			char *pass = GeneratePass(*argv[1], atoi(argv[2]));
-			if (pass != NULL) 
+		default:
 			{
-				printf("Generated password: %s\n", pass);
-				free(pass);
+				char *pass = GeneratePass(*argv[1], atoi(argv[2]));
+				if (pass != NULL) 
+				{
+					printf("Generated password: %s\n", pass);
+					free(pass);
+				}
 			}
-		return 0; // No need to break.
+	}
+	return 0; // No need to break.
 }
 
 char *GeneratePass(char char_type, size_t size)
