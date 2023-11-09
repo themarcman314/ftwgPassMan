@@ -7,57 +7,62 @@
 #include <time.h>
 #include <assert.h>
 
-#define NUM_OF_LETTERS_IN_ALPHABET 26
-#define	UPPERCASE_OFFSET 0x41
-#define	LOWERCASE_OFFSET 0x61
-#define	NUMBERS_OFFSET 0x30
-#define	SPECIAL_OFFSET 0x20
+#define NUM_OF_LETTERS_IN_ALPHABET 26 // Number of letters in the international alphabet.
+#define UPPERCASE_OFFSET 0x41			// Offset of uppercase 'a' in the ASCII table.
+#define LOWERCASE_OFFSET 0x61			// Offset of lowercase 'a' in the ASCII table.
+#define NUMBERS_OFFSET 0x30				// Offset of the character '0' in the ASCII table.
 
-char *GeneratePass(char type, size_t size);
-void ShowArguments(void);
 void InitSpecialCharArr(char *array);
 void FillSpecialCharArr(char *array, int *index, int start, int end);
 
-int main(int argc, char **argv)
-{
-	if(argc == 1)
-	{
+/*
+ * Generates a random string of a given type.
+ * Arguments:
+ * 	- `type`: a character to indicate the group of characters allowed in the string.
+ *  - `size`: the length in characters of the requested string.
+ * Returns:
+ * 	A string of length `size` with only characters of type `type`. Returns `NULL` if `malloc` fails.
+*/
+char* GeneratePass(char type, size_t size);
+
+/*
+ * Prints the allowed arguments for the program.
+*/
+void ShowArguments();
+
+int main(int argc, char** argv) {
+	switch (argc) {
+	case 1:
 		fprintf(stderr, "No arguments specified");
 		ShowArguments();
+		return 1; // No need to break.
+	case 2:
+		fprintf(stderr, "Missing one argument");
 		return 1;
 	}
 	if(argc == 2)
 	{
 		fprintf(stderr, "Missing an argument");
 		ShowArguments();
-		return 1;
+		return 1; // No need to break.
+	default:
+		char* pass = GeneratePass(*argv[1], atoi(argv[2]));
+		if (pass != NULL) {
+			printf("Generated password: %s\n", pass);
+			free(pass);
+		}
+		return 0; // No need to break.
 	}
-	char *pass = GeneratePass(*argv[1], atoi(argv[2]));
-	if(pass != NULL)
-	{
-		printf("Generated password: %s\n", pass);
-		free(pass);
-	}
-	return 0;
 }
 
 char *GeneratePass(char char_type, size_t size)
 {
 
 	char specialchar[25];
-	char *pass = malloc(size);
+	char *pass = (char*)malloc(size);
 	if(pass != NULL)
 	{
 		srand(time(NULL));
-
-		// Uppercase characters - u
-		// 0x41 - 0x5a
-		// Lowercase characters - l
-		// 0x61 - 0x7a
-		// Numbers		- n
-		// 0x30 - 0x39
-		// Special characters	- s
-		// 0x20 - 0x27 | 0x3A - 0x40 | 0x5B - 0x60 | 0x7B - 0x7E
 
 		switch(char_type)
 		{
@@ -89,6 +94,7 @@ char *GeneratePass(char char_type, size_t size)
 		fprintf(stderr, "%s", strerror(errno));
 	return pass;
 }
+
 void InitSpecialCharArr(char *array)
 {
 	// 0x20 - 0x27 | 0x3A - 0x40 | 0x5B - 0x60 | 0x7B - 0x7E
@@ -98,6 +104,7 @@ void InitSpecialCharArr(char *array)
 	FillSpecialCharArr(array, &index, 0x5b, 0x60);
 	FillSpecialCharArr(array, &index, 0x7b, 0x7e);
 }
+
 void FillSpecialCharArr(char *array, int *index, int start, int end)
 {
 	for(int count = start; count <= end; count++)
@@ -106,6 +113,7 @@ void FillSpecialCharArr(char *array, int *index, int start, int end)
 		(*index)++;
 	}
 }
+
 void ShowArguments(void)
 {
 	fprintf(stderr, ", please specify \e[1mone\e[0m of the following:"
@@ -116,13 +124,14 @@ void ShowArguments(void)
 			"for the password as a second argument.\n");
 }
 
-int Savetofile(char *pass)
-{
+// NOT IMPLEMENTED
+int Savetofile(char* pass) {
 	assert(0 && "Not Implemented");
 	return 0;
 }
-int CPtoClipboard(char *pass)
-{
+
+// NOT IMPLEMENTED
+int CPtoClipboard(char* pass) {
 	assert(0 && "Not Implemented");
 	return 0;
 }
