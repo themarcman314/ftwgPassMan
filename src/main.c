@@ -11,7 +11,14 @@
 #define	UPPERCASE_OFFSET 0x41
 #define	LOWERCASE_OFFSET 0x61
 #define	NUMBERS_OFFSET 0x30
-#define	SPECIAL_OFFSET 0x20
+#define	SPECIAL_START_OFFSET_1 0x20
+#define	SPECIAL_START_OFFSET_2 0x3a
+#define	SPECIAL_START_OFFSET_3 0x5b
+#define	SPECIAL_START_OFFSET_4 0x7b
+#define	SPECIAL_END_OFFSET_1 0x27
+#define	SPECIAL_END_OFFSET_2 0x40
+#define	SPECIAL_END_OFFSET_3 0x60
+#define	SPECIAL_END_OFFSET_4 0x7e
 
 char *GeneratePass(char type, size_t size);
 void ShowArguments(void);
@@ -93,10 +100,10 @@ void InitSpecialCharArr(char *array)
 {
 	// 0x20 - 0x27 | 0x3A - 0x40 | 0x5B - 0x60 | 0x7B - 0x7E
 	int index = 0;
-	FillSpecialCharArr(array, &index, 0x20, 0x27);
-	FillSpecialCharArr(array, &index, 0x3a, 0x40);
-	FillSpecialCharArr(array, &index, 0x5b, 0x60);
-	FillSpecialCharArr(array, &index, 0x7b, 0x7e);
+	FillSpecialCharArr(array, &index, SPECIAL_START_OFFSET_1, SPECIAL_END_OFFSET_1);
+	FillSpecialCharArr(array, &index, SPECIAL_START_OFFSET_2, SPECIAL_END_OFFSET_2);
+	FillSpecialCharArr(array, &index, SPECIAL_START_OFFSET_3, SPECIAL_END_OFFSET_3);
+	FillSpecialCharArr(array, &index, SPECIAL_START_OFFSET_4, SPECIAL_END_OFFSET_4);
 }
 void FillSpecialCharArr(char *array, int *index, int start, int end)
 {
