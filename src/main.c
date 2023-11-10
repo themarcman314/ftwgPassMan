@@ -20,6 +20,8 @@
 #define	SPECIAL_END_OFFSET_3 0x60
 #define	SPECIAL_END_OFFSET_4 0x7e
 
+#define IS_NUMBER(x) (NUMBERS_OFFSET <= x) & (x < NUMBERS_OFFSET + 10)
+
 void InitSpecialCharArr(char *array);
 void FillSpecialCharArr(char *array, int *index, int start, int end);
 
@@ -53,15 +55,26 @@ int main(int argc, char** argv)
 			return 1;
 		default:
 			{
-				char *pass = GeneratePass(*argv[1], atoi(argv[2]));
+			int size = -1;
+			if( IS_NUMBER(*argv[2]) )
+			{
+				size = atoi(argv[2]);
+				char *pass = GeneratePass(*argv[1], size);
 				if (pass != NULL) 
 				{
 					printf("Generated password: %s\n", pass);
 					free(pass);
 				}
+				return 0; // No need to break.
+			}
+			else
+			{
+				fprintf(stderr, "Invalid Number of characters\n");
+				return 1;
+			}
+
 			}
 	}
-	return 0; // No need to break.
 }
 
 char *GeneratePass(char char_type, size_t size)

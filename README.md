@@ -12,13 +12,14 @@ The program is very simple just specify two arguments so even your grandma can r
 The first is a letter specifying what types you want your password to contain
 such as:
 
-- uppercase
-- lowercase
-- numbers
-- special characters 
+- u for uppercase 
+- l for lowercase
+- n for numbers
+- s for special characters 
+
+(combinations of arguments are not yet implemented)
 
 The second argument is the size of the password in characters
-
 
 Example: (Generates a 10 character password with uppercase characters only)
 ```console
