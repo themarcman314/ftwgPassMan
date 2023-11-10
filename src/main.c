@@ -8,6 +8,7 @@
 #include <assert.h>
 
 #define NUM_OF_LETTERS_IN_ALPHABET 26
+#define NUM_OF_SPECIAL_CHARACTERS 25
 #define	UPPERCASE_OFFSET 0x41
 #define	LOWERCASE_OFFSET 0x61
 #define	NUMBERS_OFFSET 0x30
@@ -22,8 +23,8 @@
 
 #define IS_NUMBER(x) (NUMBERS_OFFSET <= x) & (x < NUMBERS_OFFSET + 10)
 
-void InitSpecialCharArr(char *array);
-void FillSpecialCharArr(char *array, int *index, int start, int end);
+void InitSpecialCharArr(char* array);
+void FillSpecialCharArr(char* array, int* index, int start, int end);
 
 /*
  * Generates a random string of a given type.
@@ -33,92 +34,81 @@ void FillSpecialCharArr(char *array, int *index, int start, int end);
  * Returns:
  * 	A string of length `size` with only characters of type `type`. Returns `NULL` if `malloc` fails.
 */
-char *GeneratePass(char type, size_t size);
+char* GeneratePass(char type, size_t size);
 
 /*
  * Prints the allowed arguments for the program.
 */
 void ShowArguments();
 
-int main(int argc, char** argv) 
-{
-	switch (argc) 
+int main(int argc, char** argv) {
+	switch (argc) {
+
+	case 1:
+		fprintf(stderr, "No arguments specified");
+		ShowArguments();
+		return 1; // No need to break.
+	case 2:
+		fprintf(stderr, "Missing one argument");
+		ShowArguments();
+		return 1;
+	default:
 	{
-
-		case 1:
-			fprintf(stderr, "No arguments specified");
-			ShowArguments();
-			return 1; // No need to break.
-		case 2:
-			fprintf(stderr, "Missing one argument");
-			ShowArguments();
+		int size = -1;
+		if (IS_NUMBER(*argv[2])) {
+			size = atoi(argv[2]);
+			char* pass = GeneratePass(*argv[1], size);
+			if (pass != NULL) {
+				printf("Generated password: %s\n", pass);
+				free(pass);
+			}
+			return 0; // No need to break.
+		} else {
+			fprintf(stderr, "Invalid Number of characters\n");
 			return 1;
-		default:
-			{
-			int size = -1;
-			if( IS_NUMBER(*argv[2]) )
-			{
-				size = atoi(argv[2]);
-				char *pass = GeneratePass(*argv[1], size);
-				if (pass != NULL) 
-				{
-					printf("Generated password: %s\n", pass);
-					free(pass);
-				}
-				return 0; // No need to break.
-			}
-			else
-			{
-				fprintf(stderr, "Invalid Number of characters\n");
-				return 1;
-			}
+		}
 
-			}
+	}
 	}
 }
 
-char *GeneratePass(char char_type, size_t size)
-{
+char* GeneratePass(char char_type, size_t size) {
 
-	char specialchar[25];
-	char *pass = (char*)malloc(size);
-	if(pass != NULL)
-	{
+	char specialchar[NUM_OF_SPECIAL_CHARACTERS];
+	char* pass = (char*)malloc(size);
+	if (pass != NULL) {
 		srand(time(NULL));
 
-		switch(char_type)
-		{
+		switch (char_type) {
 			// randomly choose characters and fill array
-			case 'u':
-				for(int count = 0; count < size; count++)
-					 pass[count] = rand()%NUM_OF_LETTERS_IN_ALPHABET + UPPERCASE_OFFSET;
-				break;
-			case 'l':
-				for(int count = 0; count < size; count++)
-					 pass[count] = rand()%NUM_OF_LETTERS_IN_ALPHABET + LOWERCASE_OFFSET;
-				break;
-			case 'n':
-				for(int count = 0; count < size; count++)
-					 pass[count] = rand()%10 + NUMBERS_OFFSET;
-				break;
-			case 's':
-				InitSpecialCharArr(specialchar);
-				for(int count = 0; count < size; count++)
-					pass[count] = specialchar[ rand()%sizeof(specialchar) ];
-				break;
-			default:
-				fprintf(stderr,"\e[0;31mWrong argument\e[0m");
-				ShowArguments();	
-				return NULL;
+		case 'u':
+			for (int count = 0; count < size; count++)
+				pass[count] = rand() % NUM_OF_LETTERS_IN_ALPHABET + UPPERCASE_OFFSET;
+			break;
+		case 'l':
+			for (int count = 0; count < size; count++)
+				pass[count] = rand() % NUM_OF_LETTERS_IN_ALPHABET + LOWERCASE_OFFSET;
+			break;
+		case 'n':
+			for (int count = 0; count < size; count++)
+				pass[count] = rand() % 10 + NUMBERS_OFFSET;
+			break;
+		case 's':
+			InitSpecialCharArr(specialchar);
+			for (int count = 0; count < size; count++)
+				pass[count] = specialchar[rand() % NUM_OF_SPECIAL_CHARACTERS];
+			break;
+		default:
+			fprintf(stderr, "\e[0;31mWrong argument\e[0m");
+			ShowArguments();
+			return NULL;
 		}
-	}
-	else
+	} else
 		fprintf(stderr, "%s", strerror(errno));
 	return pass;
 }
 
-void InitSpecialCharArr(char *array)
-{
+void InitSpecialCharArr(char* array) {
 	// 0x20 - 0x27 | 0x3A - 0x40 | 0x5B - 0x60 | 0x7B - 0x7E
 	int index = 0;
 	FillSpecialCharArr(array, &index, SPECIAL_START_OFFSET_1, SPECIAL_END_OFFSET_1);
@@ -127,23 +117,20 @@ void InitSpecialCharArr(char *array)
 	FillSpecialCharArr(array, &index, SPECIAL_START_OFFSET_4, SPECIAL_END_OFFSET_4);
 }
 
-void FillSpecialCharArr(char *array, int *index, int start, int end)
-{
-	for(int count = start; count <= end; count++)
-	{
-		array[*index] = count;	
+void FillSpecialCharArr(char* array, int* index, int start, int end) {
+	for (int count = start; count <= end; count++) {
+		array[*index] = count;
 		(*index)++;
 	}
 }
 
-void ShowArguments(void)
-{
+void ShowArguments(void) {
 	fprintf(stderr, ", please specify \e[1mone\e[0m of the following:"
-			"\n\033[34mu\e[0m for uppercase\n"
-			"\033[34ml\e[0m lowercase\n\033[34mn\e[0m for numbers"
-			"\n\033[34ms\e[0m for special characters\n"
-			"Also requires the number of desired characters "
-			"for the password as a second argument.\n");
+		"\n\033[34mu\e[0m for uppercase\n"
+		"\033[34ml\e[0m lowercase\n\033[34mn\e[0m for numbers"
+		"\n\033[34ms\e[0m for special characters\n"
+		"Also requires the number of desired characters "
+		"for the password as a second argument.\n");
 }
 
 // NOT IMPLEMENTED
