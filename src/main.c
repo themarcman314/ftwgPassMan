@@ -52,7 +52,7 @@ void ShowArguments();
  * 	 - `0`: operation succesfull.
  *   - `1` : operation failed.
 */
-int Savetofile(char* pass, char* filename);
+int SaveToFile(char* pass, char* filename);
 
 int main(int argc, char** argv) {
 	switch (argc) {
@@ -147,7 +147,7 @@ void ShowArguments(void) {
 }
 
 // NOT IMPLEMENTED
-int Savetofile(char* pass, char* filename) {
+int SaveToFile(char* pass, char* filename) {
 	FILE* file = fopen(filename, "w");
 
 	if (file != NULL) {
