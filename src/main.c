@@ -104,7 +104,7 @@ char *GeneratePass(char char_type, size_t size)
 			case 's':
 				InitSpecialCharArr(specialchar);
 				for(int count = 0; count < size; count++)
-					pass[count] = specialchar[ rand()%sizeof(specialchar) ];
+					pass[count] = specialchar[ rand()%25 ];
 				break;
 			default:
 				fprintf(stderr,"\e[0;31mWrong argument\e[0m");
