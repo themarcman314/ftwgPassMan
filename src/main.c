@@ -59,7 +59,7 @@ int ParseCharCombinations(char *combinations, int num_combinations);
  * 	A string of length `size` with only characters of type `type`. Returns `NULL` if `malloc` fails.
 */
 
-char *GeneratePass(int types, size_t size);
+char *GeneratePass(int types, size_t num_char_types, size_t size);
 
 /*
  * Prints the allowed arguments for the program.
@@ -90,7 +90,7 @@ int main(int argc, char** argv)
 					size = atoi(argv[2]);
 
 					int combinations = ParseCharCombinations(argv[1], num_combinations);
-					char *pass = GeneratePass(combinations, size);
+					char *pass = GeneratePass(combinations, num_combinations, size);
 					if (pass != NULL) 
 					{
 						#ifdef WRITE_TO_FILE
@@ -117,9 +117,9 @@ int main(int argc, char** argv)
 	}
 }
 
-char *GeneratePass(int char_types, size_t size)
+char *GeneratePass(int char_types, size_t num_char_types, size_t size)
 {
-	printf("%d",char_types);
+	printf("char types: %d\n", char_types);
 	char specialchar[25];
 	char *pass = (char*)malloc(size);
 	if(pass != NULL)
@@ -131,31 +131,46 @@ char *GeneratePass(int char_types, size_t size)
 		// random number
 		//
 		// Doesn't quite work for all cases
-		
-		switch(char_types)
+			
+		int choosen_type[num_char_types];
+		int type = 0;
+		int randomtype = 0;
+		int index = 0;
+		for(int count = 0; count < MAX_CHAR_TYPE_COMBINATIONS; count++)
 		{
-			// randomly choose characters and fill array
-			case 0b1000:
-				for(int count = 0; count < size; count++)
-					 pass[count] = rand()%NUM_OF_LETTERS_IN_ALPHABET + UPPERCASE_OFFSET;
-				break;
-			case 0b0100:
-				for(int count = 0; count < size; count++)
-					 pass[count] = rand()%NUM_OF_LETTERS_IN_ALPHABET + LOWERCASE_OFFSET;
-				break;
-			case 0b0010:
-				for(int count = 0; count < size; count++)
-					 pass[count] = rand()%10 + NUMBERS_OFFSET;
-				break;
-			case 0b0001:
-				InitSpecialCharArr(specialchar);
-				for(int count = 0; count < size; count++)
+			type = 1 << count;
+			//printf("count: %d\n", count);
+			if(char_types & type)
+			{
+				choosen_type[index] = type;	
+				index++;
+			}
+		}
+		InitSpecialCharArr(specialchar);
+		
+		for(int count = 0; count < size; count++)
+		{
+			randomtype = choosen_type[rand()%num_char_types];
+			switch(randomtype)
+			{
+				// randomly choose characters and fill array
+				case 0b1000:
+					pass[count] = rand()%NUM_OF_LETTERS_IN_ALPHABET + UPPERCASE_OFFSET;
+					break;
+				case 0b0100:
+					pass[count] = rand()%NUM_OF_LETTERS_IN_ALPHABET + LOWERCASE_OFFSET;
+					break;
+				case 0b0010:
+					pass[count] = rand()%10 + NUMBERS_OFFSET;
+					break;
+				case 0b0001:
 					pass[count] = specialchar[ rand()%25 ];
-				break;
-			default:
-				fprintf(stderr,"\e[0;31mWrong argument\e[0m");
-				ShowArguments();	
-				return NULL;
+					break;
+				default:
+					fprintf(stderr,"\e[0;31mWrong argument\e[0m");
+					ShowArguments();	
+					return NULL;
+			}
 		}
 	}
 	else
