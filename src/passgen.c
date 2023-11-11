@@ -6,18 +6,32 @@
 #include "passgen.h"
 #include "main.h"
 
+#define NUM_OF_LETTERS_IN_ALPHABET 26
+
+#define	UPPERCASE_OFFSET 0x41
+#define	LOWERCASE_OFFSET 0x61
+#define	NUMBERS_OFFSET 0x30
+#define	SPECIAL_START_OFFSET_1 0x20
+#define	SPECIAL_START_OFFSET_2 0x3a
+#define	SPECIAL_START_OFFSET_3 0x5b
+#define	SPECIAL_START_OFFSET_4 0x7b
+#define	SPECIAL_END_OFFSET_1 0x27
+#define	SPECIAL_END_OFFSET_2 0x40
+#define	SPECIAL_END_OFFSET_3 0x60
+#define	SPECIAL_END_OFFSET_4 0x7e
+
 /*
  * Initialises an array with special characters by calling FillSpecialCharArr
  * 	- `array`: the char array to be filled
  */
-static void InitSpecialCharArr(char *array);
+void InitSpecialCharArr(char *array);
 
 /*
  * Fills an array with ASCII characters from and including `start` to `end`
  * 	- `array`: the char array to be filled
  * 	- `index`: the address to an integer index so that the position at which we are filling the array is known
  */
-static void FillSpecialCharArr(char *array, int *index, int start, int end);
+void FillSpecialCharArr(char *array, int *index, int start, int end);
 
 
 /*
@@ -27,7 +41,7 @@ static void FillSpecialCharArr(char *array, int *index, int start, int end);
  * 	each type is represented by a bit (see ParseCharCombinations() in main.c)
  *	- `char_type_selection`: integer array where every selected character type is represented by an integer
  */
-static void FillCharTypesArray(int user_types, int *char_type_selection);
+void FillCharTypesArray(int user_types, int *char_type_selection);
 
 
 char *GeneratePass(int user_types, size_t num_char_types, size_t size)
@@ -87,7 +101,6 @@ void FillCharTypesArray(int user_types, int * char_type_selection)
 		}
 	}
 }
-
 
 void InitSpecialCharArr(char *array)
 {
