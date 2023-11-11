@@ -36,7 +36,6 @@ char *GeneratePass(int user_types, size_t num_char_types, size_t size)
 	char *pass = (char*)malloc(size);
 	if(pass != NULL)
 	{
-
 		InitSpecialCharArr(specialchar);
 		srand(time(NULL));
 		
