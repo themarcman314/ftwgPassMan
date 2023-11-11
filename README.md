@@ -9,7 +9,7 @@ This program is intended for linux although could be fun to expand it to other p
 
 The program is very simple just specify two arguments so even your grandma can run it
 
-The first is a letter specifying what types you want your password to contain
+The first is one or several letters specifying what character types you want your password to contain
 such as:
 
 - u for uppercase 
@@ -17,12 +17,18 @@ such as:
 - n for numbers
 - s for special characters 
 
-(combinations of arguments are not yet implemented)
-
 The second argument is the size of the password in characters
 
 Example: (Generates a 10 character password with uppercase characters only)
 ```console
 [marcman@speeddemon ~/[...]/ftwgPassMan]$ ./ftwgpm u 10
 Generated password: YTDZOSZTKS
+```
+Specified password types can also be combined
+
+Example: (Generates a 100 character password will uppercase, numbers and special characters
+```console
+[marcman@speeddemon ~/[...]/ftwgPassMan]$ ./ftwgpm uns 100
+Generated password:
+7![A079<8P}2VDY<F3T;24GVX17!3ZZOW3%<9D5@N045'DV!1J7:L2SJ5P"0U \L>127RWR0TX_\P&58U3]3T?G0|VW@99BD23GF
 ```

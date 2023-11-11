@@ -9,7 +9,6 @@
 
 #include "main.h"
 #include "passgen.h"
-#include "config.h"
 
 
 #define IS_NUMBER(x) (NUMBERS_OFFSET <= x) & (x < NUMBERS_OFFSET + 10)
@@ -36,9 +35,6 @@
  */
 int ParseCharCombinations(char *combinations, int num_combinations);
 
-/*
- * Prints the allowed arguments for the program.
-*/
 
 int main(int argc, char** argv) 
 {
@@ -123,5 +119,3 @@ void ShowArguments(void)
 			"Also requires the number of desired characters "
 			"for the password as a second argument.\n");
 }
-
-

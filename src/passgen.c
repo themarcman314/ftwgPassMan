@@ -6,9 +6,28 @@
 #include "passgen.h"
 #include "main.h"
 
-void InitSpecialCharArr(char *array);
-void FillSpecialCharArr(char *array, int *index, int start, int end);
-void FillCharTypesArray(int user_types, int * char_type_selection);
+/*
+ * Initialises an array with special characters by calling FillSpecialCharArr
+ * 	- `array`: the char array to be filled
+ */
+static void InitSpecialCharArr(char *array);
+
+/*
+ * Fills an array with ASCII characters from and including `start` to `end`
+ * 	- `array`: the char array to be filled
+ * 	- `index`: the address to an integer index so that the position at which we are filling the array is known
+ */
+static void FillSpecialCharArr(char *array, int *index, int start, int end);
+
+
+/*
+ * Fills an array with the character types requested by user
+ * rand() should later be used to randomly select the type for the next password character
+ * 	- `user_types`: integer with user requested types 
+ * 	each type is represented by a bit (see ParseCharCombinations() in main.c)
+ *	- `char_type_selection`: integer array where every selected character type is represented by an integer
+ */
+static void FillCharTypesArray(int user_types, int *char_type_selection);
 
 
 char *GeneratePass(int user_types, size_t num_char_types, size_t size)

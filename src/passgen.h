@@ -22,6 +22,5 @@
  * Returns:
  * 	A string of length `size` with only characters of type `type`. Returns `NULL` if `malloc` fails.
 */
-
 char *GeneratePass(int types, size_t num_char_types, size_t size);
 
