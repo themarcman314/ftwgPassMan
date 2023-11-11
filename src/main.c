@@ -7,26 +7,12 @@
 #include <time.h>
 #include <assert.h>
 
-#define MAX_CHAR_TYPE_COMBINATIONS 4
+#include "main.h"
+#include "passgen.h"
+#include "config.h"
 
-#define NUM_OF_LETTERS_IN_ALPHABET 26
-#define	UPPERCASE_OFFSET 0x41
-#define	LOWERCASE_OFFSET 0x61
-#define	NUMBERS_OFFSET 0x30
-#define	SPECIAL_START_OFFSET_1 0x20
-#define	SPECIAL_START_OFFSET_2 0x3a
-#define	SPECIAL_START_OFFSET_3 0x5b
-#define	SPECIAL_START_OFFSET_4 0x7b
-#define	SPECIAL_END_OFFSET_1 0x27
-#define	SPECIAL_END_OFFSET_2 0x40
-#define	SPECIAL_END_OFFSET_3 0x60
-#define	SPECIAL_END_OFFSET_4 0x7e
 
 #define IS_NUMBER(x) (NUMBERS_OFFSET <= x) & (x < NUMBERS_OFFSET + 10)
-
-void InitSpecialCharArr(char *array);
-void FillSpecialCharArr(char *array, int *index, int start, int end);
-void FillCharTypesArray(int user_types, int * char_type_selection);
 
 /* 
  * Formats and stores Character combination into char as a bitmask.
@@ -51,21 +37,8 @@ void FillCharTypesArray(int user_types, int * char_type_selection);
 int ParseCharCombinations(char *combinations, int num_combinations);
 
 /*
- * Generates a random string of a given type.
- * Arguments:
- * 	- `types`: a int to indicate the group of characters allowed in the string
- * 	see ParseCharCombinations() for a detailed explenation
- *  - `size`: the length in characters of the requested string.
- * Returns:
- * 	A string of length `size` with only characters of type `type`. Returns `NULL` if `malloc` fails.
-*/
-
-char *GeneratePass(int types, size_t num_char_types, size_t size);
-
-/*
  * Prints the allowed arguments for the program.
 */
-void ShowArguments();
 
 int main(int argc, char** argv) 
 {
@@ -107,7 +80,6 @@ int main(int argc, char** argv)
 						fprintf(stderr, "Invalid Number of characters\n");
 						return 1;
 					}
-
 				}
 		}
 	}
@@ -115,83 +87,6 @@ int main(int argc, char** argv)
 	{
 		fprintf(stderr, "Too many combinations specified");
 		ShowArguments();
-	}
-}
-
-char *GeneratePass(int user_types, size_t num_char_types, size_t size)
-{
-	char specialchar[25];
-	char *pass = (char*)malloc(size);
-	if(pass != NULL)
-	{
-
-		InitSpecialCharArr(specialchar);
-		srand(time(NULL));
-		
-		int types[num_char_types]; // Here we will store information from user selected types
-		FillCharTypesArray(user_types, types);
-		
-		int randomtype = 0;
-		for(int count = 0; count < size; count++)
-		{
-			randomtype = types[rand()%num_char_types]; // Select a character type from user input
-			switch(randomtype)
-			{
-				// randomly choose characters and fill array
-				case 0b1000:
-					pass[count] = rand()%NUM_OF_LETTERS_IN_ALPHABET + UPPERCASE_OFFSET;
-					break;
-				case 0b0100:
-					pass[count] = rand()%NUM_OF_LETTERS_IN_ALPHABET + LOWERCASE_OFFSET;
-					break;
-				case 0b0010:
-					pass[count] = rand()%10 + NUMBERS_OFFSET;
-					break;
-				case 0b0001:
-					pass[count] = specialchar[ rand()%25 ];
-					break;
-				default:
-					fprintf(stderr,"\e[0;31mWrong argument\e[0m");
-					ShowArguments();	
-					return NULL;
-			}
-		}
-	}
-	else
-		fprintf(stderr, "%s", strerror(errno));
-	return pass;
-}
-
-void FillCharTypesArray(int user_types, int * char_type_selection)		
-{
-	int type = 0;
-	int index = 0;
-	for(int count = 0; count < MAX_CHAR_TYPE_COMBINATIONS; count++)
-	{
-		type = 1 << count;
-		if(user_types & type)
-		{
-			char_type_selection[index] = type;	
-			index++;
-		}
-	}
-}
-void InitSpecialCharArr(char *array)
-{
-	// 0x20 - 0x27 | 0x3A - 0x40 | 0x5B - 0x60 | 0x7B - 0x7E
-	int index = 0;
-	FillSpecialCharArr(array, &index, SPECIAL_START_OFFSET_1, SPECIAL_END_OFFSET_1);
-	FillSpecialCharArr(array, &index, SPECIAL_START_OFFSET_2, SPECIAL_END_OFFSET_2);
-	FillSpecialCharArr(array, &index, SPECIAL_START_OFFSET_3, SPECIAL_END_OFFSET_3);
-	FillSpecialCharArr(array, &index, SPECIAL_START_OFFSET_4, SPECIAL_END_OFFSET_4);
-}
-
-void FillSpecialCharArr(char *array, int *index, int start, int end)
-{
-	for(int count = start; count <= end; count++)
-	{
-		array[*index] = count;	
-		(*index)++;
 	}
 }
 
@@ -229,14 +124,4 @@ void ShowArguments(void)
 			"for the password as a second argument.\n");
 }
 
-// NOT IMPLEMENTED
-int Savetofile(char* pass) {
-	assert(0 && "Not Implemented");
-	return 0;
-}
 
-// NOT IMPLEMENTED
-int CPtoClipboard(char* pass) {
-	assert(0 && "Not Implemented");
-	return 0;
-}
