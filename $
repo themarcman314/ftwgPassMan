@@ -62,7 +62,8 @@ int main(int argc, char** argv)
 							pass_size = atoi(argv[2]);
 
 							int combinations = ParseCharCombinations(argv[1], num_user_char_combinations, &num_char_combinations);
-							char *pass = GeneratePass(combinations, num_char_combinations, pass_size);
+							fprintf(stderr, "actual num char comb: %d", num_char_combinations);
+							char *pass = GeneratePass(combinations, num_user_char_combinations, pass_size);
 							if (pass != NULL) 
 							{
 								#ifdef WRITE_TO_FILE
@@ -108,7 +109,7 @@ int ParseCharCombinations(char *arguments, int num_combinations, int *number_of_
 				if(!parsed.u)
 				{
 					combination |= 0b1000;
-					parsed.u = 1;
+					parsed = 1;
 					(*number_of_actual_arguments)++;
 				}
 				break;
@@ -116,7 +117,7 @@ int ParseCharCombinations(char *arguments, int num_combinations, int *number_of_
 				if(!parsed.l)
 				{
 					combination |= 0b0100;
-					parsed.l = 1;
+					parsed = 1;
 					(*number_of_actual_arguments)++;
 				}
 				break;
@@ -124,7 +125,7 @@ int ParseCharCombinations(char *arguments, int num_combinations, int *number_of_
 				if(!parsed.n)
 				{
 					combination |= 0b0010;
-					parsed.n = 1;
+					parsed = 1;
 					(*number_of_actual_arguments)++;
 				}
 				break;
@@ -132,7 +133,7 @@ int ParseCharCombinations(char *arguments, int num_combinations, int *number_of_
 				if(!parsed.s)
 				{
 					combination |= 0b0001;
-					parsed.s = 1;
+					parsed = 1;
 					(*number_of_actual_arguments)++;
 				}
 				break;
