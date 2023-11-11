@@ -26,6 +26,7 @@
 
 void InitSpecialCharArr(char *array);
 void FillSpecialCharArr(char *array, int *index, int start, int end);
+void FillCharTypesArray(int user_types, int * char_type_selection);
 
 /* 
  * Formats and stores Character combination into char as a bitmask.
@@ -84,28 +85,28 @@ int main(int argc, char** argv)
 				return 1;
 			default:
 				{
-				int size = -1;
-				if( IS_NUMBER(*argv[2]) )
-				{
-					size = atoi(argv[2]);
-
-					int combinations = ParseCharCombinations(argv[1], num_combinations);
-					char *pass = GeneratePass(combinations, num_combinations, size);
-					if (pass != NULL) 
+					int size = -1;
+					if( IS_NUMBER(*argv[2]) )
 					{
-						#ifdef WRITE_TO_FILE
-						
-						#endif
-						printf("Generated password: %s\n", pass);
-						free(pass);
+						size = atoi(argv[2]);
+
+						int combinations = ParseCharCombinations(argv[1], num_combinations);
+						char *pass = GeneratePass(combinations, num_combinations, size);
+						if (pass != NULL) 
+						{
+							#ifdef WRITE_TO_FILE
+							
+							#endif
+							printf("Generated password:\n%s\n", pass);
+							free(pass);
+						}
+						return 0; // No need to break.
 					}
-					return 0; // No need to break.
-				}
-				else
-				{
-					fprintf(stderr, "Invalid Number of characters\n");
-					return 1;
-				}
+					else
+					{
+						fprintf(stderr, "Invalid Number of characters\n");
+						return 1;
+					}
 
 				}
 		}
@@ -117,40 +118,23 @@ int main(int argc, char** argv)
 	}
 }
 
-char *GeneratePass(int char_types, size_t num_char_types, size_t size)
+char *GeneratePass(int user_types, size_t num_char_types, size_t size)
 {
-	printf("char types: %d\n", char_types);
 	char specialchar[25];
 	char *pass = (char*)malloc(size);
 	if(pass != NULL)
 	{
-		srand(time(NULL));
 
-		// generate random number from 0 to 3
-		// then left shift by that number
-		// random number
-		//
-		// Doesn't quite work for all cases
-			
-		int choosen_type[num_char_types];
-		int type = 0;
-		int randomtype = 0;
-		int index = 0;
-		for(int count = 0; count < MAX_CHAR_TYPE_COMBINATIONS; count++)
-		{
-			type = 1 << count;
-			//printf("count: %d\n", count);
-			if(char_types & type)
-			{
-				choosen_type[index] = type;	
-				index++;
-			}
-		}
 		InitSpecialCharArr(specialchar);
+		srand(time(NULL));
 		
+		int types[num_char_types]; // Here we will store information from user selected types
+		FillCharTypesArray(user_types, types);
+		
+		int randomtype = 0;
 		for(int count = 0; count < size; count++)
 		{
-			randomtype = choosen_type[rand()%num_char_types];
+			randomtype = types[rand()%num_char_types]; // Select a character type from user input
 			switch(randomtype)
 			{
 				// randomly choose characters and fill array
@@ -178,6 +162,20 @@ char *GeneratePass(int char_types, size_t num_char_types, size_t size)
 	return pass;
 }
 
+void FillCharTypesArray(int user_types, int * char_type_selection)		
+{
+	int type = 0;
+	int index = 0;
+	for(int count = 0; count < MAX_CHAR_TYPE_COMBINATIONS; count++)
+	{
+		type = 1 << count;
+		if(user_types & type)
+		{
+			char_type_selection[index] = type;	
+			index++;
+		}
+	}
+}
 void InitSpecialCharArr(char *array)
 {
 	// 0x20 - 0x27 | 0x3A - 0x40 | 0x5B - 0x60 | 0x7B - 0x7E
