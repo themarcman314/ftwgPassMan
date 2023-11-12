@@ -5,6 +5,7 @@
 #include <string.h>
 #include "passgen.h"
 #include "global.h"
+#include "ansi_colors.h"
 
 #define NUM_OF_LETTERS_IN_ALPHABET 26
 
@@ -49,7 +50,7 @@ void FillCharTypesArray(int user_types, int *char_type_selection);
 char *GeneratePass(int user_types, size_t num_char_types, size_t size)
 {
 	char specialchar[25]; // array where special characters are stored
-	char *pass = (char*)malloc(size);
+	char *pass = (char*)malloc(size+1);
 	if(pass != NULL)
 	{
 		InitSpecialCharArr(specialchar); // fill special character array
@@ -78,7 +79,7 @@ char *GeneratePass(int user_types, size_t num_char_types, size_t size)
 					pass[count] = specialchar[ rand()%25 ];
 					break;
 				default:
-					fprintf(stderr,"\e[0;31mWrong argument\e[0m");
+					fprintf(stderr,RED"Wrong arguments"COLOR_RESET);
 					ShowArguments();	
 					return NULL;
 			}
@@ -86,6 +87,7 @@ char *GeneratePass(int user_types, size_t num_char_types, size_t size)
 	}
 	else
 		fprintf(stderr, "%s", strerror(errno));
+	pass[size] = 0; // Add null terminating character
 	return pass;
 }
 

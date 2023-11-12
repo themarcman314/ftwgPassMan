@@ -36,6 +36,7 @@
  */
 int ParseCharCombinations(char *combinations, int num_combinations, int *number_of_actual_arguments);
 
+int Savetofile(char* pass);
 
 int main(int argc, char** argv) 
 {
@@ -69,6 +70,7 @@ int main(int argc, char** argv)
 								
 								#endif
 								printf("Generated password:\n%s\n", pass);
+								Savetofile(pass);
 								free(pass);
 							}
 							return 0; // No need to break.
