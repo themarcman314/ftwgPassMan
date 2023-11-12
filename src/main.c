@@ -7,7 +7,7 @@
 #include <time.h>
 #include <assert.h>
 
-#include "main.h"
+#include "global.h"
 #include "passgen.h"
 #include "ansi_colors.h"
 
@@ -136,6 +136,10 @@ int ParseCharCombinations(char *arguments, int num_combinations, int *number_of_
 					(*number_of_actual_arguments)++;
 				}
 				break;
+			default:
+				fprintf(stderr, "Wrong character combination");
+				ShowArguments();
+				exit(1);
 		}
 	}
 	return combination;

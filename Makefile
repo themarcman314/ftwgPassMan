@@ -1,5 +1,5 @@
 all: src/main.c src/passgen.c src/file.c src/clipboard.c
-	gcc -o ftwgpm src/main.c src/passgen.c src/file.c src/clipboard.c
+	gcc -o bin/ftwgpm src/main.c src/passgen.c src/file.c src/clipboard.c
 
 c: src/clipboard.c
 	gcc -o src/clipboard.c
